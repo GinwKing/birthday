@@ -57,3 +57,96 @@
 // 屏幕尺寸
 const sw = window.innerWidth;
 const sh = window.innerHeight;
+
+// 温馨提示文案
+const tips = [
+    '多喝水哦~', '保持微笑呀', '每天都要元气满满', '记得吃水果',
+    '保持好心情', '好好爱自己', '我想你了', '梦想成真',
+    '期待下一次见面', '金榜题名', '顺顺利利', '早点休息',
+    '愿所有烦恼都消失', '别熬夜', '今天过得开心嘛', '天冷了，多穿衣服',
+    '你是最棒的', '记得按时吃饭', '今天也要加油呀', '注意保护眼睛',
+    '相信自己', '一切都会好的', '保持乐观心态', '记得运动一下',
+    '世界因你而美丽', '今天有好好休息吗'
+];
+
+// 背景色
+const colors = [
+    'lightpink', 'skyblue', 'lightgreen', 'lavender',
+    'lightyellow', 'plum', 'coral', 'bisque',
+    'aquamarine', 'mistyrose', 'honeydew',
+    'lavenderblush', 'oldlace'
+];
+
+// —————————— 1. 爱心轨迹弹窗 ——————————
+async function startHeartTips() {
+    const total = 200;
+    const scale = Math.min(sw, sh) / 2;
+    const cx = sw / 2.35;
+    const cy = sh / 2.65;
+
+    for (let i = 0; i < total; i++) {
+        await sleep(90);
+
+        // 爱心公式
+        const t = (i * 2 * Math.PI) / total;
+        let x = 16 * Math.pow(Math.sin(t), 3);
+        let y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+        x = cx + x * scale / 16;
+        y = cy - y * scale / 16;
+
+        // 创建窗口
+        const div = document.createElement('div');
+        div.className = 'heart-tip';
+
+        // 最后一个显示“永远爱你”
+        if (i === 199) {
+            div.innerText = '永远爱你';
+            div.style.background = 'lightpink';
+        } else {
+            div.innerText = tips[Math.floor(Math.random() * tips.length)];
+            div.style.background = colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        div.style.left = x + 'px';
+        div.style.top = y + 'px';
+        document.body.appendChild(div);
+    }
+}
+
+// —————————— 2. 随机位置弹窗 ——————————
+async function startRandomTips() {
+    for (let i = 0; i < 50; i++) {
+        await sleep(50);
+        const x = Math.random() * (sw - 250);
+        const y = Math.random() * (sh - 60);
+        
+        const div = document.createElement('div');
+        div.className = 'random-tip';
+        div.innerText = tips[Math.floor(Math.random() * tips.length)];
+        div.style.background = colors[Math.floor(Math.random() * colors.length)];
+        div.style.left = x + 'px';
+        div.style.top = y + 'px';
+        document.body.appendChild(div);
+    }
+}
+
+// 延时工具
+function sleep(ms) {
+    return new Promise(res => setTimeout(res, ms));
+}
+
+// 按空格关闭所有（和Python版逻辑一致）
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        document.body.innerHTML = '';
+    }
+});
+
+// 启动
+startHeartTips().then(() => {
+    startRandomTips();
+});
+</script>
+
+</body>
+</html>
