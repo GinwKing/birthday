@@ -6,7 +6,17 @@
 <body>
 
   <h1>我放了一张图片</h1>
-  < img src="义勇.jpg" width="300" alt="我的图片">
+  < img src="yiyong.jpg" width="300" alt="我的图片">
+  <!-- 隐藏的自动播放音频（静音，不显示控件）-->
+  <audio id="bgm" src="off-the-hook.mp3" autoplay hidden muted></audio>
 
+  <script>
+    // 第一次用户点击页面时，解除静音开始有声播放
+    document.addEventListener('click', function () {
+      var audio = document.getElementById('bgm');
+      audio.muted = false;
+      audio.play();
+    }, { once: true });
+  </script>
 </body>
 </html>
