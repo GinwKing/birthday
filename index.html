@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>生日快乐</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #ee9ca7;
+      font-family: 'Courier New', monospace;
+      overflow-x: hidden;
+    }
+    .page {
+      display: none;
+      width: 100vw;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .active-page {
+      display: block;
+      animation: fadeIn 0.7s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    /* --- 第一页 --- */
+    #page1 .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      position: relative;
+    }
+    #typed-text, #typed-text2 {
+      margin-top: 80px;
+      font-size: 2em;
+      color: #8b6a60;
+      text-align: center;
+      letter-spacing: 2px;
+      min-height: 1.5em;
+      transition: color 0.5s;
+      width: 100vw;
+      overflow-x: hidden;
+    }
+    #descend-btn, #next-btn {
+      margin-top: 30px;
+      padding: 10px 24px;
+      font-size: 1.2em;
+      color: white;
+      background: #8b6a60;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease-out;
+    }
+    #descend-btn.show, #next-btn.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #descend-btn:hover, #next-btn:hover {
+      background: #b9936c;
+    }
+    #fall-img {
+      width: 210px;
+      height: auto;
+      opacity: 0;
+      transform: translateY(-200px);
+      transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-top: 30px;
+      border-radius: 24px;
+      border: 6px solid white;
+      box-shadow: 0 0 12px rgba(0,0,0,0.2);
+    }
+    #fall-img.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* --- 第二页 --- */
+    #page2 {
+      position: relative;
+      min-height: 100vh;
+    }
+    #page2 .img-container {
+      margin-top: 80px;
+      margin-bottom: 30px;
+    }
+    #page2 .img-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      min-height: 210px;
+    }
+    #page2 .img-row img {
+      width: 210px;
+      height: 210px;
+      margin: 0 20px;
+      border-radius: 24px;
+      border: 6px solid white;
+      box-shadow: 0 0 12px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: all 0.7s cubic-bezier(0.62,0.15,0.32,1.1);
+      background: #fff;
+    }
+    /* S形动画 - 第一行从左入，第二行从右入 */
+    #page2 .img-row:first-child img {
+      transform: translateX(-120px);
+    }
+    #page2 .img-row:last-child img {
+      transform: translateX(120px);
+    }
+    #page2 .img-row img.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    #typed-text2 {
+      margin-top: 40px;
+      text-align: center;
+      min-height: 1.5em;
+      font-size: 1.7em;
+      color: #8b6a60;
+    }
+    #jump-btn {
+      display: none;
+      margin: 0 auto;
+      padding: 12px 24px;
+      font-size: 1.2em;
+      color: white;
+      background: #8b6a60;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: block;
+      margin-top: 35px;
+    }
+    #jump-btn:hover {
+      background: #b9936c;
+    }
+    /* --- 第三页 --- */
+    #page3-iframe {
+      width: 100%;
+      height: 100vh;
+      border: none;
+      background: #ee9ca7;
+    }
+  </style>
+</head>
+<body>
+<!-- 全局背景音乐，在 body 最外层 -->
+<audio id="global-bgm" src="配乐/off-the-hook.mp3" loop preload="auto"></audio>
+
+<!-- 页面一 -->
+<div id="page1" class="page active-page">
+  <div class="container">
+    <div id="typed-text"></div>
+    <button id="descend-btn">魔童降世</button>
+    <img id="fall-img" src="图片/魔童降世.jpg" alt="降世照片">
+    <audio id="audio-effect" src="配乐/仙女下凡.mp3"></audio>
+    <button id="next-btn">快进×10086</button>
+  </div>
+</div>
+<!-- 页面二 -->
+<div id="page2" class="page">
+  <div class="img-container">
+    <div class="img-row">
+      <img src="图片/1.jpg" id="img2" alt="">
+      <img src="图片/2.jpg" id="img3" alt="">
+      <img src="图片/3.jpg" id="img4" alt="">
+    </div>
+    <div class="img-row">
+      <img src="图片/6.jpg" id="img5" alt="">
+      <img src="图片/5.jpg" id="img6" alt="">
+      <img src="图片/4.jpg" id="img7" alt="">
+    </div>
+  </div>
+  <div id="typed-text2"></div>
+  <button id="jump-btn">Today</button>
+</div>
+<!-- 页面三 -->
+<div id="page3" class="page">
+  <iframe id="page3-iframe" src="" frameborder="0"></iframe>
+</div>
+
+<script>
+  // --------- 背景音乐 -----------
+  const bgm = document.getElementById('global-bgm');
+  const effect = document.getElementById('audio-effect');
+  
+  // --------- 页面导航机制 -----------
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+    document.getElementById(pageId).classList.add('active-page');
+    window.scrollTo(0,0);
+    
+    // 如果是第三页，加载 ljq.html（用时间戳确保每次都重新加载）
+    if (pageId === 'page3') {
+      const iframe = document.getElementById('page3-iframe');
+      iframe.src = 'ljq.html?' + new Date().getTime();
+    }
+  }
+
+  // --------- 第一页 -----------
+  const content = "2007年5月22日，农历四月初四";
+  const typedDiv = document.getElementById('typed-text');
+  const descendBtn = document.getElementById('descend-btn');
+  const fallImg = document.getElementById('fall-img');
+  const nextBtn = document.getElementById('next-btn');
+  let index = 0;
+  typedDiv.textContent = '';
+
+  function typeNext() {
+    if (index <= content.length) {
+      typedDiv.textContent = content.slice(0, index);
+      index++;
+      setTimeout(typeNext, 120);
+    } else {
+      // 文字出现完后浮现降世按钮
+      setTimeout(function() {
+        descendBtn.classList.add('show');
+      }, 300);
+    }
+  }
+  typeNext();
+
+  // 降世按钮逻辑
+  descendBtn.addEventListener('click', function() {
+    // 降世按钮消失
+    descendBtn.style.opacity = '0';
+    descendBtn.style.transform = 'translateY(-20px)';
+    setTimeout(function() {
+      descendBtn.style.display = 'none';
+    }, 500);
+    
+    // 先播放音效
+    effect.currentTime = 0;
+    effect.play();
+    
+    // 音效结束后播放背景音乐
+    effect.addEventListener('ended', function() {
+      bgm.currentTime = 0;
+      bgm.volume = 1;
+      bgm.play().catch(e => console.log('播放失败'));
+    }, { once: true });
+    
+    // 丝滑下落照片
+    setTimeout(function() {
+      fallImg.classList.add('show');
+    }, 200);
+    
+    // 照片下落后出现快进按钮
+    setTimeout(function() {
+      nextBtn.classList.add('show');
+    }, 1200);
+  });
+
+  // 跳转到第二页
+  nextBtn.addEventListener('click', function() {
+    showPage('page2');
+    document.getElementById('img2').classList.remove('visible');
+    document.getElementById('img3').classList.remove('visible');
+    document.getElementById('img4').classList.remove('visible');
+    document.getElementById('img5').classList.remove('visible');
+    document.getElementById('img6').classList.remove('visible');
+    document.getElementById('img7').classList.remove('visible');
+    document.getElementById('jump-btn').style.display = 'none';
+    let typed2 = document.getElementById('typed-text2');
+    typed2.textContent = '';
+    setTimeout(() => showNext2(0), 600);
+  });
+
+  // --------- 第二页 -----------
+  // S形顺序：1(img2)、2(img3)、3(img4)、6(img7)、5(img6)、4(img5)
+  const imgs2 = [
+    document.getElementById('img2'),
+    document.getElementById('img3'),
+    document.getElementById('img4'),
+    document.getElementById('img7'),
+    document.getElementById('img6'),
+    document.getElementById('img5')
+  ];
+
+  function showNext2(i) {
+    if (!document.getElementById('page2').classList.contains('active-page')) return;
+    if (i < imgs2.length) {
+      imgs2[i].classList.add('visible');
+      setTimeout(function(){ showNext2(i+1); }, 650);
+    } else {
+      let typed2 = document.getElementById('typed-text2');
+      const txt2 = "2026年5月22日，农历四月初四";
+      let idx2 = 0;
+      typed2.textContent = '';
+      function typeNext2() {
+        if (idx2 <= txt2.length) {
+          typed2.textContent = txt2.slice(0, idx2);
+          idx2++;
+          setTimeout(typeNext2, 120);
+        } else {
+          document.getElementById('jump-btn').style.display = 'block';
+        }
+      }
+      setTimeout(typeNext2, 500);
+    }
+  }
+  document.getElementById('jump-btn').onclick = function() {
+    showPage('page3');
+  };
+
+  showPage('page1');
+</script>
+</body>
+</html>
